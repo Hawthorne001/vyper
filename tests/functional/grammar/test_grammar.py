@@ -37,9 +37,9 @@ def test_basic_grammar_empty():
     assert len(tree.children) == 0
 
 
-def fix_terminal(terminal: str) -> bool:
+def fix_terminal(terminal: str) -> str:
     # these throw exceptions in the grammar
-    for bad in ("\x00", "\\ ", "\x0c"):
+    for bad in ("\x00", "\\ ", "\x0c", "\x0d"):
         terminal = terminal.replace(bad, " ")
     return terminal
 
@@ -102,6 +102,6 @@ def has_no_docstrings(c):
     max_examples=500, suppress_health_check=[HealthCheck.too_slow, HealthCheck.filter_too_much]
 )
 def test_grammar_bruteforce(code):
-    _, _, _, reformatted_code = pre_parse(code + "\n")
-    tree = parse_to_ast(reformatted_code)
+    pre_parse_result = pre_parse(code + "\n")
+    tree = parse_to_ast(pre_parse_result.reformatted_code)
     assert isinstance(tree, Module)
