@@ -47,7 +47,10 @@ def generate_report(base_path: str, head_path: str) -> str:
     change_rows = []
     all_files = sorted(set(base.keys()) | set(head.keys()))
     # errors (size=None) sort to top
-    all_files.sort(key=lambda f: head.get(f, {}).get("venom", {}).get("O2", {}).get("size") or float('inf'), reverse=True)
+    all_files.sort(
+        key=lambda f: head.get(f, {}).get("venom", {}).get("O2", {}).get("size") or float("inf"),
+        reverse=True,
+    )
 
     for file in all_files:
         base_data = base.get(file, {})
@@ -69,22 +72,35 @@ def generate_report(base_path: str, head_path: str) -> str:
             for opt in LEGACY_OPTS:
                 h = head_data.get("legacy", {}).get(opt, {})
                 legacy_cells.append(fmt_size(h.get("size"), h.get("error")))
-            change_rows.append(f"| {file} | {' | '.join(legacy_cells)} | {' | '.join(venom_cells)} |")
+            change_rows.append(
+                f"| {file} | {' | '.join(legacy_cells)} | {' | '.join(venom_cells)} |"
+            )
 
     # --- Full table: just HEAD sizes, no deltas ---
     full_rows = []
     head_files = sorted(head.keys())
     # errors (size=None) sort to top
-    head_files.sort(key=lambda f: head[f].get("venom", {}).get("O2", {}).get("size") or float('inf'), reverse=True)
+    head_files.sort(
+        key=lambda f: head[f].get("venom", {}).get("O2", {}).get("size") or float("inf"),
+        reverse=True,
+    )
 
     for file in head_files:
         head_data = head[file]
-        legacy_cells = [fmt_size(head_data.get("legacy", {}).get(opt, {}).get("size"),
-                                  head_data.get("legacy", {}).get(opt, {}).get("error"))
-                        for opt in LEGACY_OPTS]
-        venom_cells = [fmt_size(head_data.get("venom", {}).get(opt, {}).get("size"),
-                                 head_data.get("venom", {}).get(opt, {}).get("error"))
-                       for opt in VENOM_OPTS]
+        legacy_cells = [
+            fmt_size(
+                head_data.get("legacy", {}).get(opt, {}).get("size"),
+                head_data.get("legacy", {}).get(opt, {}).get("error"),
+            )
+            for opt in LEGACY_OPTS
+        ]
+        venom_cells = [
+            fmt_size(
+                head_data.get("venom", {}).get(opt, {}).get("size"),
+                head_data.get("venom", {}).get(opt, {}).get("error"),
+            )
+            for opt in VENOM_OPTS
+        ]
         full_rows.append(f"| {file} | {' | '.join(legacy_cells)} | {' | '.join(venom_cells)} |")
 
     # --- Build output ---
