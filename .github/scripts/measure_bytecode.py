@@ -21,7 +21,11 @@ DIR_PATH = Path("tests/functional/examples/thirdparty")
 # legacy: O2, Os only
 # venom: O2, O3, Os
 LEGACY_OPT_LEVELS = {"O2": OptimizationLevel.GAS, "Os": OptimizationLevel.CODESIZE}
-VENOM_OPT_LEVELS = {"O2": OptimizationLevel.GAS, "O3": OptimizationLevel.O3, "Os": OptimizationLevel.CODESIZE}
+VENOM_OPT_LEVELS = {
+    "O2": OptimizationLevel.GAS,
+    "O3": OptimizationLevel.O3,
+    "Os": OptimizationLevel.CODESIZE,
+}
 
 
 def get_example_vy_filenames(limit: int | None = None):
@@ -29,7 +33,9 @@ def get_example_vy_filenames(limit: int | None = None):
     return files[:limit] if limit else files
 
 
-def compile_one(source_code: str, opt_level: OptimizationLevel, experimental: bool) -> tuple[int | None, str | None]:
+def compile_one(
+    source_code: str, opt_level: OptimizationLevel, experimental: bool
+) -> tuple[int | None, str | None]:
     """Compile with given settings. Returns (size, error)."""
     try:
         settings = Settings(experimental_codegen=experimental, optimize=opt_level)
@@ -68,7 +74,9 @@ def measure_contract(filename: str) -> tuple[str, dict]:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--limit", type=int, help="Only compile first N contracts (for local testing)")
+    parser.add_argument(
+        "--limit", type=int, help="Only compile first N contracts (for local testing)"
+    )
     args = parser.parse_args()
 
     files = get_example_vy_filenames(args.limit)
