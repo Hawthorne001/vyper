@@ -7,8 +7,8 @@ Format commit messages while preserving:
 - Intentional formatting
 """
 
-import sys
 import re
+import sys
 from textwrap import fill
 
 
